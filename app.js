@@ -4,11 +4,18 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var index = require('./routes/index');
-var users = require('./routes/users');
+var session = require('express-session');
+var passport = require('passport');
 
 var app = express();
+
+//____________________
+//  Setup Middleware  \\________________
+
+//connect w/ MongoDB ***
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/proj2');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,8 +29,32 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+
+//____________________
+//  Setup Passport   \\________________
+
+// disable deprication error msgs
+app.use(session({
+    secret: 'wdi-13-hk',
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// setup passport strategies
+require('./passport/facebook')(passport);
+
+
+var index = require('./routes/index');
+var users = require('./routes/users')(app, passport);
+
+//console.log(users);
+
 app.use('/', index);
-app.use('/users', users);
+//app.use('/users', users); ** line was not neccessary because routes/user.js already modifies the app.js directly, so there is no point to tell it to go look for users middleware.
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

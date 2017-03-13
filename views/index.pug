@@ -1,12 +1,8 @@
 extends layout
 
 block content
-	h1= Proj2Sandbox
-		p
-		| Step Counter:
-		span#stepCounter 1
-
-	button.btn.btn-primary(type='button') Button
-
+	a.btn.btn-block.btn-social.btn-facebook(href='/auth/facebook')
+		span.fa.fa-facebook
+		|   Sign in with Facebook
 
 block scripts
