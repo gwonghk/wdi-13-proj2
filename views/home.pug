@@ -6,29 +6,6 @@ block content
 		| Step Counter:
 		span#stepCounter  NAN
 
-	section#drawer(role='region')
-		article#selected.content.scrollable.header
-			canvas#canvas(width='1231.6666666666667', height='362.5')
-			table#dataTable
-				tbody
-					tr
-						th
-							| DISTANCE
-							br
-							| (km)
-					tr
-						td
-							span#distance-number 0
-			.data-section
-				#coordinates
-			.settings-btns
-				.half
-					button#btn-activatePodo
-						span#textActivation Pause
-					button#btn-raz.danger Reinitialization
-
-
-
 	button.btn.btn-primary#initStepGame(type='button') Start Treasure Hunt
 
 	button.btn.btn-primary#queryStats(type='button') Stats

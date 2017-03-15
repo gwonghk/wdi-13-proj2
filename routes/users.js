@@ -8,7 +8,12 @@ module.exports = function(app, passport){
 
 	// go Home
 	app.get('/home', function(req, res){
-		res.render('home', {});
+		// make sure that they have logged in
+	    if(req.user){
+	    	res.render('home', {});
+	    }else{
+	        res.redirect("/");
+	    }
 	});
 
 	// go Error

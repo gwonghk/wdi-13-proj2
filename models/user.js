@@ -1,11 +1,16 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
+var Pet = require('./pet');
+
 var userSchema = mongoose.Schema({
 	name		: {type: String},
-	email 		: {type: String, unique: true, required: true},
+	email 		: {type: String,
+					unique: true,
+					required: true},
 	password 	: {type: String},
-
+	pet			: [{ type: mongoose.Schema.Types.ObjectId,
+					ref: 'Pet' }],
 	facebook: {
 		accessToken: String,
 		refreshToken: String,

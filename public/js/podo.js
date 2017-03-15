@@ -1,5 +1,3 @@
-console.log('podoJS loaded.');
-
 function Kalman() {
 	this.G  = 1; // filter gain
 	this.Rw = 1; // noise power desirable

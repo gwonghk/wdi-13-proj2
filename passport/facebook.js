@@ -3,9 +3,13 @@ var facebookStrategy = require('passport-facebook').Strategy;
 
 var appid = '407082439643405';
 var appSecret = '6d88a6d27fd3dabf049d7d29c78a78fd';
-var callback = "http://192.168.132.101:3000/auth/facebook/callback"
+var callback = "http://192.168.132.102:3000/auth/facebook/callback"
+//var callback = "http://192.168.32.148:3000/auth/facebook/callback"
 
-var User = require('../models/user') 	//check obtaining the correct thing
+
+var User = require('../models/user');
+
+var userController = require('../controller/userController');
 
 module.exports = function (passport) {
 
@@ -29,9 +33,7 @@ module.exports = function (passport) {
 	},
 	function(accessToken, refreshToken, profile, done) {	//creating the new user to store in MongoDB
 
-		
-
-		process.nextTick(function(){ //important to make asychronous if have busy site 
+		process.nextTick(function(){ //important to make asychronous if have busy site
 
 		  var email = profile.emails[0].value;
 		  console.log("facebookStrategy:", email);
@@ -54,19 +56,18 @@ module.exports = function (passport) {
               	});
 
             }else{
-            	console.log("facebookStrategy: User unknown - Create new user");
-
+            	console.log("facebookStrategy: User not found - Create new user");
             	// Create user
-              	var user = new User();
-              	user.email = email;
-              	user.password = "";
-              	user.facebook.accessToken = accessToken;
-            	user.facebook.refreshToken = refreshToken;
-            	user.facebook.id = profile.id;
-            	user.facebook.profile = profile;
-              	user.save(function(err, user){
+                userController.createNewUser(accessToken, refreshToken, profile);
+
+              	// user.save(function(err, user){
                 	return done(null,user);
-              	});
+              	// });
+                // user.save((err, user) => {
+                //   return done(null,user);
+                //   console.log(err);
+                // });
+
             }
           });
       	});

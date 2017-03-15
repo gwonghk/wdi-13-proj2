@@ -3,6 +3,7 @@ var GameBoard = function(){
 	var podo_stepSize = localStorage.podo_stepSize || 50,
 		podo_weight = localStorage.podo_weight || 70;
 		podo_step = localStorage.podo_step || 0,
+		podo_step_old = 0,
 		podo_speed = localStorage.podo_speed || 0,
 		podo_calory = localStorage.podo_calory || 0,
 		isGPSEnabled = localStorage.isGPSEnabled || false;
@@ -23,9 +24,20 @@ var GameBoard = function(){
 
 	if (window.DeviceOrientationEvent) {
 		window.addEventListener("devicemotion", function( event ) {
-			console.log(podo_step);
+
 
 			if (activatePodo){
+
+				if( podo_step_old == 0 || podo_step != podo_step_old  ){
+
+					// emit  event
+					console.log('CLIENT: DevicemotionEvent - Podo_Step: ', podo_step);
+					socket.emit('step', podo_step_old);
+					console.log('sent socket');
+					podo_step_old = podo_step;
+				}
+
+
 
 				if ((podo.acc_norm.length < 2) || (podo.stepArr.length < 2))
 				{
@@ -81,5 +93,6 @@ var GameBoard = function(){
 
 }
 
+var socket = new io.connect('http://192.168.132.102:3000');
+//var socket = new io.connect('http://192.168.32.148:3000');
 var gameBoard = new GameBoard();
-

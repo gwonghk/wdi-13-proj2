@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
+var Movement = require('./movement');
 
 var petSchema = new mongoose.Schema({
 
 	name: String,
 	age: Number,
-	inheritMovement: Number
+	movement: [Movement.schema]
 
 });
 
