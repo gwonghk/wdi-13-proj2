@@ -3,8 +3,8 @@ var Movement = require('./movement');
 
 var petSchema = new mongoose.Schema({
 
-	name: String,
-	age: Number,
+	name: {type: String},
+	age: {type: Number},
 	movement: [Movement.schema]
 
 });

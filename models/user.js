@@ -4,12 +4,13 @@ var bcrypt = require('bcrypt-nodejs');
 var Pet = require('./pet');
 
 var userSchema = mongoose.Schema({
-	name		: {type: String},
+	firstname	: {type: String},
+	lastname	: {type: String},
 	email 		: {type: String,
 					unique: true,
 					required: true},
 	password 	: {type: String},
-	pet			: [{ type: mongoose.Schema.Types.ObjectId,
+	pet			: [{ type: mongoose.Schema.Types.Mixed,
 					ref: 'Pet' }],
 	facebook: {
 		accessToken: String,

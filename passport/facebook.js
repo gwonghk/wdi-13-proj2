@@ -1,15 +1,10 @@
-var facebookStrategy = require('passport-facebook').Strategy;
-
-
 var config = require("../config.json");
+var facebookStrategy = require('passport-facebook').Strategy;
 
 
 var appid = '407082439643405';
 var appSecret = '6d88a6d27fd3dabf049d7d29c78a78fd';
 var callback = "http://"+ config.domain + ":3000/auth/facebook/callback"
-//var callback = "http://192.168.32.148:3000/auth/facebook/callback"
-
-console.log( config.domain );
 
 var User = require('../models/user');
 

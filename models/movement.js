@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var movementSchema = new mongoose.Schema({
 
-	totalSteps: Number,
+	totalSteps: {type: Number},
 	updated: { type: Date, default: Date.now() }
 
 });

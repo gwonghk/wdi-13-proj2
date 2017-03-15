@@ -1,10 +1,10 @@
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('express-session');
 var passport = require('passport');
 var socketio = require('socket.io');
 var passportSocketIo = require('passport.socketio');
@@ -50,15 +50,11 @@ app.use(session({
 	store: mongoStoreObj
 }));
 
-
-
 app.use(passport.initialize());
 app.use(passport.session());
 
 // setup passport strategies
 require('./passport/facebook')(passport);
-
-
 var index = require('./routes/index');
 var users = require('./routes/users')(app, passport);
 
@@ -136,7 +132,7 @@ io.use(passportSocketIo.authorize({
 
 
 function onAuthorizeSuccess(data, accept){
-    console.log('successful connection to socket.io');
+    console.log('SOCKET-PASSPORT: successful connection to socket.io');
 
     // The accept-callback still allows us to decide whether to
     // accept the connection or not.
@@ -151,7 +147,7 @@ function onAuthorizeSuccess(data, accept){
 function onAuthorizeFail(data, message, error, accept){
     if(error)
         throw new Error(message);
-    console.log('failed connection to socket.io:', message);
+    console.log('SOCKET-PASSPORT: failed connection to socket.io:', message);
 
     // We use this callback to log all of our failed connections.
     accept(null, false);
@@ -165,28 +161,6 @@ function onAuthorizeFail(data, message, error, accept){
     // this error will be sent to the user as a special error-package
     // see: http://socket.io/docs/client-api/#socket > error-object
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

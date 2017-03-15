@@ -1,3 +1,4 @@
+//var config = require(".../config.json");
 var GameBoard = function(){
 
 	var podo_stepSize = localStorage.podo_stepSize || 50,
@@ -32,9 +33,8 @@ var GameBoard = function(){
 
 					// emit  event
 					console.log('CLIENT: DevicemotionEvent - Podo_Step: ', podo_step);
-					socket.emit('step', podo_step_old);
-					console.log('sent socket');
 					podo_step_old = podo_step;
+					socket.emit('step', podo_step_old);
 				}
 
 
@@ -93,6 +93,7 @@ var GameBoard = function(){
 
 }
 
-var socket = new io.connect('http://localhost:3000');
-//var socket = new io.connect('http://192.168.32.148:3000');
+var socket = new io.connect("http://192.168.132.102:3000");
+// var socket = new io.connect("http://"+ config.domain + ":3000");
+// var socket = new io.connect('http://192.168.32.148:3000');
 var gameBoard = new GameBoard();

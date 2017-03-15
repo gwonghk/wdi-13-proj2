@@ -18,6 +18,8 @@ exports.createNewUser = function(accessToken, refreshToken, profile){
 	firstPet.save((err) => { console.log('saved firstPet, return error:', err); });
 
 	var user = new User();
+	user.firstname = profile._json.first_name;
+	user.lastname = profile._json.last_name;
 	user.email = profile.emails[0].value;
 	user.password = "";
 
