@@ -1,6 +1,5 @@
 var movementController = require('../controller/movementController');
 
-
 module.exports = function(io){
 
 	var movementStepCount = 0;
@@ -10,7 +9,7 @@ module.exports = function(io){
 	// similar to doc ready function?
 		socket.on('step', function(podo_step_oldData){
 		// data is sent from the 'step' event on client side from main.js
-			console.log(socket.request.user);
+			console.log('SOCKET - socket.request.user: ',socket.request.user);
 			if (socket.request.user && socket.request.user.logged_in) {
 				console.log('SERVER Socket received podo_step_old data:', podo_step_oldData);
 				movementController.saveStep(podo_step_oldData)
