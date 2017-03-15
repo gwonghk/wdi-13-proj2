@@ -1,6 +1,16 @@
 var movementController = require('../controller/movementController');
 
+var sessionStore     = require('connect-mongo'), // find a working session store (have a look at the readme)
+    passportSocketIo = require("passport.socketio");
+
 module.exports = function(io){
+
+
+
+
+
+
+
 
 	var movementStepCount = 0;
 

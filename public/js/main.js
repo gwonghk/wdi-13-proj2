@@ -93,6 +93,6 @@ var GameBoard = function(){
 
 }
 
-var socket = new io.connect('http://192.168.132.102:3000');
+var socket = new io.connect('http://localhost:3000');
 //var socket = new io.connect('http://192.168.32.148:3000');
 var gameBoard = new GameBoard();

@@ -40,13 +40,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 //____________________
 //  Setup Passport   \\________________
 
+var mongoStoreObj = new MongoStore({ mongooseConnection: mongoose.connection })
+
 // disable deprication error msgs
 app.use(session({
 	resave: true,
 	saveUninitialized: true,
 	secret: 'wdi-13-hk',
-	store: new MongoStore({ mongooseConnection: mongoose.connection })
+	store: mongoStoreObj
 }));
+
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -60,16 +65,7 @@ var users = require('./routes/users')(app, passport);
 app.use('/', index);
 //app.use('/users', users); ** line was not neccessary because routes/user.js already modifies the app.js directly, so there is no point to tell it to go look for users middleware.
 
-//___________________________
-//  Setup Passport Socket    \________________
 
-io.use(passportSocketIo.authorize({
-  key: 'connect.sid',
-  secret: 'wdi-13-hk',
-  store: MongoStore,
-  passport: passport,
-  cookieParser: cookieParser
-}));
 
 //_______________________
 //  Import Controllers   \__________________
@@ -95,5 +91,167 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ *  Socket.io
+ */
+var io = require('socket.io')(server);
+var sockets = require('./socket/socket')(io);
+
+
+//With Socket.io >= 1.0
+io.use(passportSocketIo.authorize({
+    cookieParser: cookieParser,         // the same middleware you registrer in express
+    key:          'connect.sid',        // the name of the cookie where express/connect stores its session_id
+    secret:       'wdi-13-hk',     // the session_secret to parse the cookie
+    store:        mongoStoreObj,           // we NEED to use a sessionstore. no memorystore please
+    success:      onAuthorizeSuccess,   // *optional* callback on success - read more below
+    fail:         onAuthorizeFail,      // *optional* callback on fail/error - read more below
+}));
+
+
+
+function onAuthorizeSuccess(data, accept){
+    console.log('successful connection to socket.io');
+
+    // The accept-callback still allows us to decide whether to
+    // accept the connection or not.
+    accept(null, true);
+
+    // OR
+
+    // If you use socket.io@1.X the callback looks different
+    accept();
+}
+
+function onAuthorizeFail(data, message, error, accept){
+    if(error)
+        throw new Error(message);
+    console.log('failed connection to socket.io:', message);
+
+    // We use this callback to log all of our failed connections.
+    accept(null, false);
+
+    // OR
+
+    // If you use socket.io@1.X the callback looks different
+    // If you don't want to accept the connection
+    if(error)
+        accept(new Error(message));
+    // this error will be sent to the user as a special error-package
+    // see: http://socket.io/docs/client-api/#socket > error-object
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    var bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    console.log('Listening on ' + bind);
+}
 
 module.exports = app;
