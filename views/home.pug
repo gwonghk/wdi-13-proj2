@@ -1,11 +1,27 @@
 extends layout
 
 block content
-	h1 Pet Poring
-		p
-		| Step Counter:
-		span#stepCounter  NAN
-
-	button.btn.btn-primary#initStepGame(type='button') Start Treasure Hunt
-
-	button.btn.btn-primary#queryStats(type='button') Stats
+	.container
+		.row
+			.col.align-self-center
+				h1 Treasure Hunt
+				h1
+					| Step Counter:
+					span#stepCounter  NAN
+			.col.align-self-center
+				#petprofilepic
+			.col.align-self-center
+				p Bytes
+			.col.align-self-center
+				button.btn.btn-primary.btn-md#queryStats(type='button') Stats
+				// Button trigger modal
+				button.btn.btn-primary.btn-md(data-toggle='modal', data-target='#initTreasureHunt')
+					| Start!
+				include ./input-modal.pug
+			.col.align-self-center
+				button.btn.btn-primary.btn-md#initStepGame(type='button') Quit
+block scripts
+	//- Socket.io ****
+	script(src='/socket.io/socket.io.js')
+	script(src='js/podo.js')
+	script(src='js/main.js')

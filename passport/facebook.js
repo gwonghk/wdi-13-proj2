@@ -1,5 +1,5 @@
-var config = require("../config.json");
 var facebookStrategy = require('passport-facebook').Strategy;
+var config = require("../config.json");
 
 
 var appid = '407082439643405';
@@ -13,21 +13,21 @@ var userController = require('../controller/userController');
 module.exports = function (passport) {
 
   passport.serializeUser(function(user, done) {
-    done(null, user.id);
+	done(null, user.id);
   });
 
   // de-serialize
   passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-      done(err, user);
-    });
+	User.findById(id, function(err, user) {
+	  done(err, user);
+	});
   });
 
   passport.use("facebook", new facebookStrategy({
-	    clientID: appid,
-	    clientSecret: appSecret,
-	    callbackURL: callback,
-	    profileFields: ['id', 'emails', 'name', 'photos', 'link', 'gender'] 	//these are the feilds we want to take from the API (check regularly as FB changes settings)
+		clientID: appid,
+		clientSecret: appSecret,
+		callbackURL: callback,
+		profileFields: ['id', 'emails', 'name', 'photos', 'link', 'gender'] 	//these are the feilds we want to take from the API (check regularly as FB changes settings)
 
 	},
 	function(accessToken, refreshToken, profile, done) {	//creating the new user to store in MongoDB
@@ -37,38 +37,32 @@ module.exports = function (passport) {
 		  var email = profile.emails[0].value;
 		  console.log("facebookStrategy:", email);
 
-          User.findOne( {'email' : email }, function(err, user){
+		  User.findOne( {'email' : email }, function(err, user){
 
-          	if(err){
-              console.log("facebookStrategy: There was an error in the database call", err);
-              return done(err);
-            }
+			if(err){
+			  console.log("facebookStrategy: There was an error in the database call", err);
+			  return done(err);
+			}
 
-            if(user){
-            	console.log("facebookStrategy: Local user found - merging data");
-            	user.facebook.accessToken = accessToken;
-            	user.facebook.refreshToken = refreshToken;
-            	user.facebook.id = profile.id;
-            	user.facebook.profile = profile;
-            	user.save(function(err, user){
-                	return done(null,user);
-              	});
+			if(user){
+				console.log("facebookStrategy: Local user found - merging data");
+				user.facebook.accessToken = accessToken;
+				user.facebook.refreshToken = refreshToken;
+				user.facebook.id = profile.id;
+				user.facebook.profile = profile;
+				user.save(function(err, user){
+					return done(null,user);
+				});
 
-            }else{
-            	console.log("facebookStrategy: User not found - Create new user");
-            	// Create user
-                userController.createNewUser(accessToken, refreshToken, profile);
-
-              	// user.save(function(err, user){
-                	return done(null,user);
-              	// });
-                // user.save((err, user) => {
-                //   return done(null,user);
-                //   console.log(err);
-                // });
-
-            }
-          });
-      	});
+			}else{
+				console.log("facebookStrategy: User not found - Create new user");
+				// Create user
+				userController.createNewUser(accessToken, refreshToken, profile, () => {
+					console.log('return user to get out of this func')
+					return done(null,user);
+				});
+			}
+		  });
+		});
 	}));
 }

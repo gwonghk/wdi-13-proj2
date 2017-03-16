@@ -1,0 +1,40 @@
+extends layout
+
+block content
+	.row#info1
+		.col-xs-4
+			.infosqr#desire-treasure
+		.col-xs-4
+			.infosqr#pet-emote
+		.col-xs-4
+			.infosqr#info-poop3
+	.row#info2
+		.col-xs-4
+			.infosqr#desire-drink
+		.col-xs-4
+			.infosqr#pet-pic
+		.col-xs-4
+			.infosqr#info-poop2
+	.row#info3
+		.col-xs-4
+			.infosqr#desire-food
+		.col-xs-4
+			.sqrbutton#user-querypet
+		.col-xs-4
+			.infosqr#info-poop1
+	.row
+		.col-xs-6
+			.sqrbutton#btn-treasure
+		.col-xs-6
+			.sqrbutton#btn-food
+	.row
+		.col-xs-6
+			.sqrbutton#btn-poop
+		.col-xs-6
+			.sqrbutton#btn-social
+
+block scripts
+	//- Socket.io ****
+	script(src='/socket.io/socket.io.js')
+	script(src='js/podo.js')
+	script(src='js/main.js')

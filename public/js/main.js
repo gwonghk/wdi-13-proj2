@@ -26,8 +26,9 @@ var GameBoard = function(){
 	if (window.DeviceOrientationEvent) {
 		window.addEventListener("devicemotion", function( event ) {
 
-
 			if (activatePodo){
+//_______________________________
+//  On pedometer detect of motion\\________________
 
 				if( podo_step_old == 0 || podo_step != podo_step_old  ){
 
@@ -36,8 +37,6 @@ var GameBoard = function(){
 					podo_step_old = podo_step;
 					socket.emit('step', podo_step_old);
 				}
-
-
 
 				if ((podo.acc_norm.length < 2) || (podo.stepArr.length < 2))
 				{
