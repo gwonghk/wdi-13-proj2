@@ -35,8 +35,6 @@ module.exports = function (passport) {
 		process.nextTick(function(){ //important to make asychronous if have busy site
 
 		  var email = profile.emails[0].value;
-		  console.log("facebookStrategy:", email);
-
 		  User.findOne( {'email' : email }, function(err, user){
 
 			if(err){
@@ -57,9 +55,8 @@ module.exports = function (passport) {
 			}else{
 				console.log("facebookStrategy: User not found - Create new user");
 				// Create user
-				userController.createNewUser(accessToken, refreshToken, profile, () => {
-					console.log('return user to get out of this func')
-					return done(null,user);
+				userController.createNewUser(accessToken, refreshToken, profile, function(userdata){
+					return done(null,userdata);
 				});
 			}
 		  });

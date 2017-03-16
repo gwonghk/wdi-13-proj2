@@ -29,7 +29,9 @@ exports.createNewUser = function(accessToken, refreshToken, profile, cb){
 	user.facebook.refreshToken = refreshToken;
 	user.facebook.id = profile.id;
 	user.facebook.profile = profile;
-	user.save((err) => { if(err)console.log('ERROR - userController.createNewUser-user:', err); });
+	user.save((err, userdata) => { if(err){console.log('ERROR - userController.createNewUser-user:', err);}
+		cb(userdata);
+	});
 }
 
 /*  	var user = new User();

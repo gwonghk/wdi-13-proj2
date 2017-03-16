@@ -10,5 +10,4 @@ router.get('/', function(req, res, next) {
 its handeled in users.js
 but why in app.get instead of router .get?? */
 
-
 module.exports = router;

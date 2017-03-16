@@ -7,16 +7,15 @@ exports.updateStep = function(user, podo_step){
 
 	Movement.findOne( {'_id': userMovement }, function (err, movement){
 		if(err){
-			//console.log('movementControl.updateStep: error in datbase call');
+			console.log('movementControl.updateStep: error in datbase call:');
 			return err;
 		}
 		if (movement){
 			movement.totalSteps = podo_step;
 			movement.save((err) => {
 				if(err){
-					console.log('update movement returned error:', err); }});
-			console.log(movement);
-			console.log('movement.saved:', movement.totalSteps);
+					console.log('movementControl.updateStep error:', err); }});
+			console.log('movement.Controller - step saved:', movement.totalSteps);
 		}
 	});
 }

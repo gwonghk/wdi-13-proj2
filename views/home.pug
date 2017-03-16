@@ -1,25 +1,24 @@
 extends layout
 
 block content
-	.container
-		.row
-			.col.align-self-center
+	.row.text-center
+		.col.align-self-center
 				h1 Treasure Hunt
 				h1
 					| Step Counter:
 					span#stepCounter  NAN
-			.col.align-self-center
-				#petprofilepic
-			.col.align-self-center
-				p Bytes
-			.col.align-self-center
-				button.btn.btn-primary.btn-md#queryStats(type='button') Stats
-				// Button trigger modal
-				button.btn.btn-primary.btn-md(data-toggle='modal', data-target='#initTreasureHunt')
-					| Start!
-				include ./input-modal.pug
-			.col.align-self-center
-				button.btn.btn-primary.btn-md#initStepGame(type='button') Quit
+		.col.align-self-center
+			.center-block#petprofilepic
+		.col.align-self-center
+			p Bytes
+		.col.align-self-center
+			// Button trigger modal
+			button.btn.btn-primary.btn-md(data-toggle='modal', data-target='#initTreasureHunt')
+				| Start!
+			include ./input-modal.pug
+			button.btn.btn-primary.btn-md#initStepGame(type='button') Quit
+		.col.align-self-center
+			button.btn.btn-primary.btn-md#queryStats(type='button') Stats
 block scripts
 	//- Socket.io ****
 	script(src='/socket.io/socket.io.js')

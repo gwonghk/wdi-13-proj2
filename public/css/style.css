@@ -7,14 +7,20 @@ a {
   color: #00B7FF;
 }
 
-#pet {
-    height: 50px;
-    width: 50px;
-    position: absolute;
-    /*background-color: orange;*/
-/*    border: 1px solid black;*/
+/*  ___________________
+___/ Poring Animation  \_______________*/
+
+#petprofilepic {
+    height: 120px;
+    width: 105px;
     padding: 0;
-    margin: 0;
-    background-image: url(../assets/pigpig.png);
-    animation: pig .3s steps(6) infinite;
+    background-color: beige;
+    display: block;
+    /* background-image: url(../img/poring_walk_105x120_right.png);
+    animation: poringwalk 1s steps(8) infinite; */
+}
+
+@keyframes poringwalk {
+ from { background-position: 0px; }
+ to { background-position: 840px; }
 }
