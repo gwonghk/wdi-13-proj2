@@ -9,12 +9,12 @@ var passport = require('passport');
 var socketio = require('socket.io');
 var passportSocketIo = require('passport.socketio');
 var MongoStore = require('connect-mongo')(session);
-
+var graph = require('fbgraph');
 
 var app = express();
 var http = require('http');
 var server = http.Server(app);
-var io = socketio(server);
+//var io = socketio(server);
 
 //____________________
 //  Setup Middleware  \\________________
@@ -89,7 +89,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-var http = require('http');
 
 /**
  * Get port from environment and store in Express.
@@ -102,6 +101,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
+var http = require('http');
 var server = http.createServer(app);
 
 /**

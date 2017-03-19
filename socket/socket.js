@@ -4,19 +4,42 @@ var sessionStore     = require('connect-mongo'); // find a working session store
 var passportSocketIo = require("passport.socketio");
 
 module.exports = function(io){
-
-	var movementStepCount = 0;
-
 	io.on('connection', function(socket){
-	// establish connection, socket = data from socket aka Client side!
-	// similar to doc ready function?
-		socket.on('step', function(podo_step){
+	// establish connection, socket = data from Client side
+		socket.on('step', function(stepDistance, cb){
 		// data is sent from the 'step' event on client side from main.js
+		// why is this being called twice?!
 			if (socket.request.user && socket.request.user.logged_in) {
 			// check that user is loggedin
-				movementController.updateStep(socket.request.user, podo_step);
+				movementController.updateStep(socket.request.user, stepDistance, function(totalSteps, treasureSessionSteps) {
+	    			io.emit('updated-stepCount', totalSteps, treasureSessionSteps, socket.request.user);
+				});
 		    }
 		});
+
+		socket.on('treasureGame-start', function(treasureStepCountInput) {
+			movementController.setTreasureStepCount(socket.request.user, treasureStepCountInput);
+		})
+
+		/*socket.on('treasureGame-step', function(stepDistance){
+			movementController.updateTreasureStepCount(socket.request.user, stepDistance, function(remainingTreasureSteps) {
+				if (remainingTreasureSteps > 0) {
+					io.emit('update-treasureStepCount', remainingTreasureSteps);
+				} else if (remainingTreasureSteps <= 0) {
+					io.emit('end-treasure-game');
+				};
+
+			})
+			console.log(' movementController-reduce treasureGame step by stepDistance:', stepDistance);
+		});
+
+
+		socket.on('treasureGame-stepUpdate-req', function(){
+			io.emit('treasureGame-stepUpdate-res')
+			console.log('movementController-get the info from db and update UI');
+			// body...
+		})*/
+
 	});
 };
 

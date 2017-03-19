@@ -7,6 +7,14 @@ a {
   color: #00B7FF;
 }
 
+/*  ______________
+___/ Input Modal  \_______________*/
+
+#errormessagetxt {
+  color: #a94442;
+}
+
+
 /*  ___________________
 ___/ Poring Animation  \_______________*/
 
@@ -14,9 +22,9 @@ ___/ Poring Animation  \_______________*/
     height: 120px;
     width: 105px;
     padding: 0;
-    background-color: beige;
     display: block;
-    /* background-image: url(../img/poring_walk_105x120_right.png);
+    background-color: beige;
+    /* background-image: url(../img/poring_walk_105x120_right.png); */
     animation: poringwalk 1s steps(8) infinite; */
 }
 

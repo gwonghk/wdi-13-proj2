@@ -1,6 +1,6 @@
 var facebookStrategy = require('passport-facebook').Strategy;
 var config = require("../config.json");
-
+var graph = require('fbgraph');
 
 var appid = '407082439643405';
 var appSecret = '6d88a6d27fd3dabf049d7d29c78a78fd';

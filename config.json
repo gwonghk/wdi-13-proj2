@@ -1,4 +1,5 @@
 {
   "_comment": "localhost interchangable with ip address of server, dont forget to update main.js socket ip!",
-  "domain": "192.168.132.102"
+  "domain2": "10.38.23.206",
+  "domain": "192.168.132.103"
 }

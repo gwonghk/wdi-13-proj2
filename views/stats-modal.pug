@@ -1,5 +1,5 @@
 // Modal
-#initTreasureHunt.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalTitle', aria-hidden='true')
+#checkStats.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalTitle2', aria-hidden='true')
 	.modal-dialog
 		.modal-content
 			// Modal Header
@@ -7,16 +7,14 @@
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
 					span.sr-only Close
-				h4#modalTitle.modal-title
-					| Treasure Hunt
+				h4#modalTitle2.modal-title
+					| Stats
 			// Modal Body
 			.modal-body
 				form(role='form')
 					.form-group
-						label(for='stepCountInput') How far away is the treasure?
-						input#treasureStepCountInput.form-control(type='number', min='1', step='1', required="true", placeholder='Number of paces (eg. 50)')
-					.row
-						#errormessagetxt
+						label(for='totalStepCountLabel') Total Steps Walked:
+						p#totalStepCount NAN
 					//- .checkbox
 					//- 	label
 					//- 		input(type='checkbox')
@@ -25,6 +23,4 @@
 			// Modal Footer
 			.modal-footer
 				button.btn.btn-default(type='button', data-dismiss='modal')
-					| Cancel
-				button#startTreasureHunt.btn.btn-primary(type='button')
-					| Go!
+					| Close

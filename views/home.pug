@@ -1,26 +1,32 @@
 extends layout
 
 block content
+	#roomLabel Room One
 	.row.text-center
 		.col.align-self-center
-				h1 Treasure Hunt
-				h1
-					| Step Counter:
-					span#stepCounter  NAN
+			h1 Treasure Hunt
 		.col.align-self-center
 			.center-block#petprofilepic
 		.col.align-self-center
-			p Bytes
+			p#petname Bytes
 		.col.align-self-center
 			// Button trigger modal
-			button.btn.btn-primary.btn-md(data-toggle='modal', data-target='#initTreasureHunt')
+			button.btn.btn-primary.btn-lg#initTreasureHuntStartButton.has(data-toggle='modal', data-target='#initTreasureHunt', data-treasureHuntIsActive=false)
 				| Start!
 			include ./input-modal.pug
-			button.btn.btn-primary.btn-md#initStepGame(type='button') Quit
 		.col.align-self-center
-			button.btn.btn-primary.btn-md#queryStats(type='button') Stats
+			h3 Steps Till Treasure: 
+				span#stepsTillTreasure Waiting for Game Start
+		.col.align-self-center
+			h3 Total Steps Walked: 
+				span#totalStepCount Start Walking!
+			//- button.btn.btn-primary.btn-md(data-toggle='modal', data-target='#checkStats') Stats
+			//- include ./stats-modal.pug
+			//- button.btn.btn-primary.btn-md#initStepGame(type='button') Quit
 block scripts
 	//- Socket.io ****
 	script(src='/socket.io/socket.io.js')
+	script(src='js/stats.js')
+	script(src='js/treasure.js')
 	script(src='js/podo.js')
 	script(src='js/main.js')
