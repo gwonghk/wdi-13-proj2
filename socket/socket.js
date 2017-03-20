@@ -2,25 +2,54 @@ var movementController = require('../controller/movementController');
 
 var sessionStore     = require('connect-mongo'); // find a working session store (have a look at the readme)
 var passportSocketIo = require("passport.socketio");
+var room = 'globalRoom';
+var users = {};
 
 module.exports = function(io){
 	io.on('connection', function(socket){
 	// establish connection, socket = data from Client side
-		socket.on('step', function(stepDistance, cb){
+		var me = null;
+
+
+		socket.on('joinGlobalRoom', function(room, cb) {
+			socket.join(room);
+			console.log('joined GlobalRoomroom:', room);
+			me = socket.request.user;
+		});
+
+
+		socket.on('local-step', function(stepDistance, cb){
 		// data is sent from the 'step' event on client side from main.js
-		// why is this being called twice?!
-			if (socket.request.user && socket.request.user.logged_in) {
+			var user = socket.request.user;
+			if (user && user.logged_in) {
 			// check that user is loggedin
-				movementController.updateStep(socket.request.user, stepDistance, function(totalSteps, treasureSessionSteps) {
-	    			io.emit('updated-stepCount', totalSteps, treasureSessionSteps, socket.request.user);
+				movementController.updateStep(user, stepDistance, function(totalSteps, treasureSessionSteps) {
+	    			socket.emit('fromController-updatedStepCount', totalSteps, treasureSessionSteps, socket.request.user);
+	    			// this calls updateStepCount() on client
+				socket.broadcast.to(room).emit('global-step', 1);
+				// broadcasts to everyone except self 
 				});
 		    }
 		});
+
+		// socket.on('global-step', function(stepDistance, cb){
+		// 	console.log('IS THIS RUNNING?!?!')
+		// 	// getting wrong user
+		// 	if (me && me.logged_in) {
+		// 	// check that user is loggedin
+		// 		movementController.updateStep(me, stepDistance, function(totalSteps, treasureSessionSteps) {
+	 //    			io.emit('updated-stepCount', totalSteps, treasureSessionSteps, socket.request.user);
+		// 		});
+		//     }
+		// });
 
 		socket.on('treasureGame-start', function(treasureStepCountInput) {
 			movementController.setTreasureStepCount(socket.request.user, treasureStepCountInput);
 		})
 
+
+	});
+};
 		/*socket.on('treasureGame-step', function(stepDistance){
 			movementController.updateTreasureStepCount(socket.request.user, stepDistance, function(remainingTreasureSteps) {
 				if (remainingTreasureSteps > 0) {
@@ -39,9 +68,6 @@ module.exports = function(io){
 			console.log('movementController-get the info from db and update UI');
 			// body...
 		})*/
-
-	});
-};
 
 /* Reference from before:
 module.exports = function(io){

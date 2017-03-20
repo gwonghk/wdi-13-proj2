@@ -2,7 +2,9 @@
 var serverIP = "http://192.168.132.103:3000";
 
 var GameBoard = function(){
+	var self = this;
 	var socket = io.connect(serverIP);
+	var room = 'globalRoom'
 
 	var podo_stepSize = localStorage.podo_stepSize || 50,
 		podo_weight = localStorage.podo_weight || 70,
@@ -27,13 +29,27 @@ var GameBoard = function(){
 
 	var podo_stepDistance = 1;
 
+	//______________________
+	//  Multiplayer Rooms 	\________________
+
+	// self.joinRoom = function(){
+
+	socket.on('connect', function() {
+		//console.log('this is me, ', socket.request.user)
+		socket.emit('joinGlobalRoom', room);
+	});
+
+	socket.on('global-step', function(stepDistance, cb){
+			console.log('IS THIS RUNNING?!?!');
+	})
+
 	function updateStepCount() {
 			/* emit event to
 				> update movementSchema.totalSteps
 				> get movementSchema.totalSteps and send back to us
 				>
 			*/
-			socket.on('updated-stepCount', function(totalSteps, treasureSessionSteps, user){
+			socket.on('fromController-updatedStepCount', function(totalSteps, treasureSessionSteps, user){
 				// update UI with number from database
 				$('#petname').html(user.firstname+"'s Poring");
 				$('#totalStepCount').html(totalSteps);
@@ -83,7 +99,7 @@ var GameBoard = function(){
 				//________________________________
 				//  On pedometer detect of motion \________
 					if( podo_step_old == 0 || podo_step != podo_step_old ){
-						socket.emit('step', podo_stepDistance);
+						socket.emit('local-step', podo_stepDistance);
 						updateStepCount();
 					};
 
@@ -159,6 +175,7 @@ var GameBoard = function(){
 //  Init   			 \_______________________
 $(function (){
 
-	var gameBoard = new GameBoard();
 
 });
+	var gameBoard = new GameBoard();
+	// move this back into Init after debug;

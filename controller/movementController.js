@@ -19,8 +19,8 @@ exports.updateStep = function(user, stepDistance, cb){
 				if(err){
 					console.log('movementControl.updateStep error:', err); }
 				});
-			console.log('movement.Controller-totalSteps', movement.totalSteps);
-			console.log('movement.Controller-treasureSessionSteps', movement.treasureSessionSteps);
+			//console.log('movement.Controller-totalSteps', movement.totalSteps);
+			//console.log('movement.Controller-treasureSessionSteps', movement.treasureSessionSteps);
 		}
 		cb( movement.totalSteps, movement.treasureSessionSteps);
 	});
