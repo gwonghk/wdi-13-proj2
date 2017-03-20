@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
-var socketio = require('socket.io');
 var passportSocketIo = require('passport.socketio');
 var MongoStore = require('connect-mongo')(session);
 var graph = require('fbgraph');
@@ -14,7 +13,6 @@ var graph = require('fbgraph');
 var app = express();
 var http = require('http');
 var server = http.Server(app);
-//var io = socketio(server);
 
 //____________________
 //  Setup Middleware  \\________________

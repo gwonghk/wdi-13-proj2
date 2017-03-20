@@ -4,6 +4,11 @@ var ObjectId = require('mongodb').ObjectId;
 exports.updateStep = function(user, stepDistance, cb){
 	// update user's pet's movement count in the database
 	var userMovement = user.pet[0].movement[0]._id;
+	console.log('movementController: user._id;', user._id);
+	console.log('movementController: user.pet[0];', user.pet[0]._id);
+	console.log('movementController: user.pet[0].movement[0]:', user.pet[0].movement[0]._id);
+
+
 
 	Movement.findOne( {'_id': userMovement }, function (err, movement){
 		if(err){

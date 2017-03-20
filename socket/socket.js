@@ -1,16 +1,33 @@
 var movementController = require('../controller/movementController');
 
 var sessionStore     = require('connect-mongo'); // find a working session store (have a look at the readme)
-var passportSocketIo = require("passport.socketio");
 var room = 'roomFido';
 var connectedUsers = [];
-
-
 
 module.exports = function(io){
 	io.on('connection', function(socket){
 
-		connectedUsers.push(socket.request.user);
+		function addConnectedUsers() {
+			if (!connectedUsers.includes(socket.request.user)) {
+				// if user isnt in the array, add them to it
+				connectedUsers.push(socket.request.user);
+				connectedUsers.forEach(function(e) {
+					console.log(e.firstname, 'is connected');
+				})
+				console.log('SOCKET.js total connectedUsers:', connectedUsers.length);
+			};
+		}
+
+		setInterval(function(){
+			connectedUsers.forEach((element, index) => {
+				if(element._id == socket.request.user._id) {
+					element = socket.request.user;
+				}
+			});
+			socket.emit('updateActiveUsers', connectedUsers);
+		}, 5000);
+
+
 	//__________________________________
 	//  Invoke Controller Functions 	\________________
 		function saveStep(user, stepDistance) {
@@ -23,11 +40,13 @@ module.exports = function(io){
 	//__________________________
 	//  Traffic Routing Events 	\________________
 
+
+
 		// Join Pet Room
 		socket.on('joinGlobalRoom', function(room, cb) {
 			socket.join(room);
-			console.log(socket.request.user.firstname, 'joined GlobalRoomroom:', room);
-			console.log('SOCKET.js connectedUsers.length', connectedUsers.length);
+			//console.log(socket.request.user.firstname, 'joined GlobalRoomroom:', room);
+			addConnectedUsers();
 		});
 
 		// Add Steps to Pets

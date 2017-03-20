@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
 var Pet = require('./pet');
+var Bag = require('./bag');
 
 var userSchema = mongoose.Schema({
 	firstname	: {type: String},
@@ -12,6 +13,7 @@ var userSchema = mongoose.Schema({
 	password 	: {type: String},
 	pet			: [{ type: mongoose.Schema.Types.Mixed,
 					ref: 'Pet' }],
+	bag 		: [Bag.schema],
 	facebook: {
 		accessToken: String,
 		refreshToken: String,

@@ -45,3 +45,9 @@ block scripts
 	script(src='js/treasure.js')
 	script(src='js/podo.js')
 	script(src='js/main.js')
+	script#rowTemplate(type='text/x-custom-template')
+		tr
+			td.lboardRank {{rank}}
+			td.lboardName {{name}}
+			td.lboardPet {{petType}}
+			td.lboardScore {{stepCount}}

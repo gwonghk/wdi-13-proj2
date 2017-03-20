@@ -1,9 +1,9 @@
 //var config = require(".../config.json");
 var serverIP = "http://192.168.132.103:3000";
+var socket = io.connect(serverIP);
 
 var GameBoard = function(){
 	var self = this;
-	var socket = io.connect(serverIP);
 	var room = 'roomFido'
 	var roomPlayerList = ['tom', 'joelle'];
 
@@ -33,17 +33,18 @@ var GameBoard = function(){
 	//______________________
 	//  Multiplayer Rooms 	\________________
 
-	// self.joinRoom = function(){
 
+	// on Connect, join a room
 	socket.on('connect', function() {
-		//console.log('this is me, ', socket.request.user)
 		socket.emit('joinGlobalRoom', room);
 	});
 
-	// socket.on('global-step', function(stepDistance, cb){
-	// 		console.log('IS THIS RUNNING?!?!');
-	// })
+	//
+	socket.on('updateActiveUsers', function(connectedUsersArray){
+		updateLeaderBoard(connectedUsersArray);
+	});
 
+	// on Step from other players via Server
 	socket.on('step', function(stepDistance){
 		socket.emit('step', stepDistance);
 	})
@@ -52,6 +53,54 @@ var GameBoard = function(){
 		$('#roomAttendance').html(roomPlayerList);
 	}
 
+	function updateLeaderBoard(connectedUsersArray) {
+		var template = $('#rowTemplate').html();
+		$('#leaderBoardBody').empty();
+		connectedUsersArray.forEach(e => {
+			var player = e;
+			var pet = e.pet[0];
+			var movement = e.pet[0].movement[0];
+			var bag = e.bag[0];
+
+			var userName = player.firstname;
+			var petName = pet.name;
+			var petType = pet.type;
+			var mvTotalStep = movement.totalSteps;
+			var mvTreasure = movement.treasureSessionSteps;
+			var treasureCount = bag.treasureCount;
+
+			console.log('making template with user movement:', mvTotalStep);
+
+			var userObj = {
+			userName: userName,
+			petName: petName,
+			petType: petType,
+			mvTotalStep: mvTotalStep,
+			mvTreasure: mvTreasure,
+			treasureCount: treasureCount }
+
+			var tableRowHTML = template;
+			tableRowHTML = tableRowHTML.replace("{{rank}}", 1);
+			tableRowHTML = tableRowHTML.replace("{{name}}", userName);
+			tableRowHTML = tableRowHTML.replace("{{petType}}", ".icon.mini-"+petType);
+			tableRowHTML = tableRowHTML.replace("{{stepCount}}", mvTotalStep);
+			$('#leaderBoardBody').append(tableRowHTML);
+		})
+
+	};
+
+		// td.lboardRank {{rank}}
+		// td.lboardName {{name}}
+		// td.lboardPet{{petType}}
+		// td.lboardScore.myTotalStepCount {{stepCount}}
+
+		/*tbody#leaderBoardBody
+			tr
+				td.lboardRank 1
+				//- (scope='row') #{index + 1}
+				td.lboardName adsf
+				td.lboardPet
+				td.lboardScore.myTotalStepCount*/
 
 	function updateStepCount() {
 			/* emit event to
@@ -187,12 +236,15 @@ var GameBoard = function(){
 	});
 
 
+
+
+
 }
 //___________________
 //  Init   			 \_______________________
 $(function (){
 
+	var gameBoard = new GameBoard();
 
 });
-	var gameBoard = new GameBoard();
 	// move this back into Init after debug;

@@ -1,7 +1,6 @@
 //// Treasure Page /////////
 var TreasureGame = function(){
 	var self = this;
-	var socket = io.connect(serverIP);
 	var gameIsActive = false;
 	var treasureGameStepCounter_old = 0;
 	var treasureGameStepCounter = 0;
