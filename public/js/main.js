@@ -4,7 +4,8 @@ var serverIP = "http://192.168.132.103:3000";
 var GameBoard = function(){
 	var self = this;
 	var socket = io.connect(serverIP);
-	var room = 'globalRoom'
+	var room = 'roomFido'
+	var roomPlayerList = ['tom', 'joelle'];
 
 	var podo_stepSize = localStorage.podo_stepSize || 50,
 		podo_weight = localStorage.podo_weight || 70,
@@ -43,6 +44,15 @@ var GameBoard = function(){
 			console.log('IS THIS RUNNING?!?!');
 	})
 
+	socket.on('step', function(stepDistance){
+		socket.emit('step', stepDistance);
+	})
+
+	function showRoomAttendees() {
+		$('#roomAttendance').html(roomPlayerList);
+	}
+
+
 	function updateStepCount() {
 			/* emit event to
 				> update movementSchema.totalSteps
@@ -60,6 +70,13 @@ var GameBoard = function(){
 					var winCheck = $('#stepsTillTreasure').html();
 					if ( winCheck != 0) {
 						socket.emit('treasureGame-step', podo_stepDistance);
+						// Treasure chest UI
+						var barMax = $('#stepsTillTreasureBar').attr('aria-valuemax');
+						var barProgress = barMax - treasureSessionSteps;
+						var barProgressPercent = (barProgress / barMax) * 100;
+
+						$('#stepsTillTreasureBar').attr('aria-valuenow', barProgress);
+						$('#stepsTillTreasureBar').css('width', barProgressPercent+'%');
 						$('#stepsTillTreasure').html(treasureSessionSteps);
 					} else if (winCheck == 0) {
 						treasureGame.winGame();
@@ -99,7 +116,7 @@ var GameBoard = function(){
 				//________________________________
 				//  On pedometer detect of motion \________
 					if( podo_step_old == 0 || podo_step != podo_step_old ){
-						socket.emit('local-step', podo_stepDistance);
+						socket.emit('step-action', podo_stepDistance);
 						updateStepCount();
 					};
 
