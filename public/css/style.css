@@ -13,7 +13,7 @@ a {
 
 /*  ______________
 ___/ Input Modal  \_______________*/
-
+	a
 #errormessagetxt {
 	color: #a94442;
 }
@@ -36,6 +36,23 @@ ___/ Poring Animation  \_______________*/
 @keyframes poringwalk {
 	from { background-position: 0px; }
 	to { background-position: 840px; }
+}
+
+/*  ________________________
+___/ Mini Poring Animation  \_______________*/
+
+.lboardPet {
+	height: 30px;
+	width: 27px;
+	padding: 0;
+	display: block;
+	background: url(../img/poring_walking_30x30.png);
+	animation: miniporingwalk 1s steps(8) infinite; */
+}
+
+@keyframes miniporingwalk {
+	from { background-position: 0px; }
+	to { background-position: -210px; }
 }
 
 /*  __________________

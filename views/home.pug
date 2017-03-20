@@ -23,18 +23,20 @@ block content
 			// Button trigger modal
 			button.btn.btn-primary.btn-sm#initTreasureHuntStartButton.has(data-toggle='modal', data-target='#initTreasureHunt', data-treasureHuntIsActive=false)
 				| Start!
-			include ./input-modal.pug
+			include ./modal-input.pug
 		.col-xs-9
 			.progress
 				#stepsTillTreasureBar.progress-bar.progress-bar-striped.active(role='progressbar', aria-valuenow='0', aria-valuemin='0', aria-valuemax='100', style='width: 0%')
 					span.sr-only 45% Complete
 				span#stepsTillTreasure Waiting for Game Start
+	.row
+		.col.align.-sef.center
+			button.btn.btn-primary.btn-md(data-toggle='modal', data-target='#checkStats') Leaderboard
+			include ./modal-leaderboard.pug
 	.row.text-center
 		.col.align-self-center
 			h4 Total Steps Walked: 
-				span#totalStepCount Start Walking!
-			//- button.btn.btn-primary.btn-md(data-toggle='modal', data-target='#checkStats') Stats
-			//- include ./stats-modal.pug
+				span.myTotalStepCount Start Walking!
 			//- button.btn.btn-primary.btn-md#initStepGame(type='button') Quit
 block scripts
 	//- Socket.io ****

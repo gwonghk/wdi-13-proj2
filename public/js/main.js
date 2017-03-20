@@ -40,9 +40,9 @@ var GameBoard = function(){
 		socket.emit('joinGlobalRoom', room);
 	});
 
-	socket.on('global-step', function(stepDistance, cb){
-			console.log('IS THIS RUNNING?!?!');
-	})
+	// socket.on('global-step', function(stepDistance, cb){
+	// 		console.log('IS THIS RUNNING?!?!');
+	// })
 
 	socket.on('step', function(stepDistance){
 		socket.emit('step', stepDistance);
@@ -62,7 +62,7 @@ var GameBoard = function(){
 			socket.on('fromController-updatedStepCount', function(totalSteps, treasureSessionSteps, user){
 				// update UI with number from database
 				$('#petname').html(user.firstname+"'s Poring");
-				$('#totalStepCount').html(totalSteps);
+				$('.myTotalStepCount').html(totalSteps);
 
 				var gameIsActive = $('#initTreasureHuntStartButton').data('treasureHuntIsActive');
 
