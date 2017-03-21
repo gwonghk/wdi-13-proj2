@@ -11,9 +11,10 @@ var userSchema = mongoose.Schema({
 					unique: true,
 					required: true},
 	password 	: {type: String},
-	pet			: [{ type: mongoose.Schema.Types.Mixed,
+	pet			: [{ type: mongoose.Schema.Types.ObjectId,
 					ref: 'Pet' }],
-	bag 		: [Bag.schema],
+	bag 		: [{ type: mongoose.Schema.Types.ObjectId,
+					ref: 'Bag' }],
 	facebook: {
 		accessToken: String,
 		refreshToken: String,

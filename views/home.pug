@@ -41,7 +41,6 @@ block content
 block scripts
 	//- Socket.io ****
 	script(src='/socket.io/socket.io.js')
-	script(src='js/stats.js')
 	script(src='js/treasure.js')
 	script(src='js/podo.js')
 	script(src='js/main.js')
@@ -49,5 +48,5 @@ block scripts
 		tr
 			td.lboardRank {{rank}}
 			td.lboardName {{name}}
-			td.lboardPet {{petType}}
+			{{petType}}
 			td.lboardScore {{stepCount}}

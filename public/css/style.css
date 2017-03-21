@@ -13,7 +13,7 @@ a {
 
 /*  ______________
 ___/ Input Modal  \_______________*/
-	a
+
 #errormessagetxt {
 	color: #a94442;
 }
@@ -29,7 +29,7 @@ ___/ Poring Animation  \_______________*/
 	padding: 0;
 	display: block;
 	background-color: beige;
-	/* background: url(../img/poring_walk_105x120_right.png); */
+	background: url(../img/poring_walk_105x120_right.png);
 	animation: poringwalk 1s steps(8) infinite; */
 }
 
@@ -51,6 +51,20 @@ ___/ Mini Poring Animation  \_______________*/
 }
 
 @keyframes miniporingwalk {
+	from { background-position: 0px; }
+	to { background-position: -210px; }
+}
+
+.icon.mini-poporing {
+	height: 30px;
+	width: 27px;
+	padding: 0;
+	display: block;
+	background: url(../img/poporing_walking_30x30.png);
+	animation: minipoporingwalk 1s steps(8) infinite; */
+}
+
+@keyframes minipoporingwalk {
 	from { background-position: 0px; }
 	to { background-position: -210px; }
 }

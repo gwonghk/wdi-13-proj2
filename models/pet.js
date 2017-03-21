@@ -6,7 +6,8 @@ var petSchema = new mongoose.Schema({
 	name: {type: String},
 	type: {type: String, default: 'poring' },
 	age: {type: Number},
-	movement: [Movement.schema]
+	movement: [{ type: mongoose.Schema.Types.ObjectId,
+					ref: 'Movement' }],
 
 });
 

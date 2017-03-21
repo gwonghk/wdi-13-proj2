@@ -40,8 +40,8 @@ var GameBoard = function(){
 	});
 
 	//
-	socket.on('updateActiveUsers', function(connectedUsersArray){
-		updateLeaderBoard(connectedUsersArray);
+	socket.on('updateActiveUsers', function(activeUsersArray){
+		updateLeaderBoard(activeUsersArray);
 	});
 
 	// on Step from other players via Server
@@ -53,54 +53,47 @@ var GameBoard = function(){
 		$('#roomAttendance').html(roomPlayerList);
 	}
 
-	function updateLeaderBoard(connectedUsersArray) {
+	function updateLeaderBoard(activeUsersArray) {
 		var template = $('#rowTemplate').html();
 		$('#leaderBoardBody').empty();
-		connectedUsersArray.forEach(e => {
-			var player = e;
-			var pet = e.pet[0];
-			var movement = e.pet[0].movement[0];
-			var bag = e.bag[0];
+		activeUsersArray.forEach(e => {
 
-			var userName = player.firstname;
-			var petName = pet.name;
-			var petType = pet.type;
-			var mvTotalStep = movement.totalSteps;
-			var mvTreasure = movement.treasureSessionSteps;
-			var treasureCount = bag.treasureCount;
+			// var player = {
+			// 	userName: e.firstname,
+			// 	petName: petName,
+			// 	petType: petType,
+			// 	petAge: petAge,
+			// 	mvTotalStep: movementTotalSteps,
+			// 	mvTreasure: movementTreasureSteps
+			// 	//treasureCount = bag.treasureCount;
+			// }
 
-			console.log('making template with user movement:', mvTotalStep);
+			// td.lboardRank {{rank}}
+			// td.lboardName {{name}}
+			// td.lboardPet{{petType}}
+			// td.lboardScore.myTotalStepCount {{stepCount}}
 
-			var userObj = {
-			userName: userName,
-			petName: petName,
-			petType: petType,
-			mvTotalStep: mvTotalStep,
-			mvTreasure: mvTreasure,
-			treasureCount: treasureCount }
+			/*tbody#leaderBoardBody
+				tr
+					td.lboardRank 1
+					//- (scope='row') #{index + 1}
+					td.lboardName adsf
+					td.lboardPet
+					td.lboardScore.myTotalStepCount*/
 
 			var tableRowHTML = template;
 			tableRowHTML = tableRowHTML.replace("{{rank}}", 1);
-			tableRowHTML = tableRowHTML.replace("{{name}}", userName);
-			tableRowHTML = tableRowHTML.replace("{{petType}}", ".icon.mini-"+petType);
-			tableRowHTML = tableRowHTML.replace("{{stepCount}}", mvTotalStep);
+			tableRowHTML = tableRowHTML.replace("{{name}}", e.userName);
+			tableRowHTML = tableRowHTML.replace("{{petType}}", '<td class="lboardName icon mini-'+e.petType+'"></td>"');
+			tableRowHTML = tableRowHTML.replace("{{stepCount}}", e.mvTotalStep);
 			$('#leaderBoardBody').append(tableRowHTML);
 		})
-
 	};
 
-		// td.lboardRank {{rank}}
-		// td.lboardName {{name}}
-		// td.lboardPet{{petType}}
-		// td.lboardScore.myTotalStepCount {{stepCount}}
+	function updateAttendence(activeUsersArray) {
+		// body...
+	}
 
-		/*tbody#leaderBoardBody
-			tr
-				td.lboardRank 1
-				//- (scope='row') #{index + 1}
-				td.lboardName adsf
-				td.lboardPet
-				td.lboardScore.myTotalStepCount*/
 
 	function updateStepCount() {
 			/* emit event to

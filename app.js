@@ -9,6 +9,7 @@ var passport = require('passport');
 var passportSocketIo = require('passport.socketio');
 var MongoStore = require('connect-mongo')(session);
 var graph = require('fbgraph');
+var async = require("async");
 
 var app = express();
 var http = require('http');

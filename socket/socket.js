@@ -1,13 +1,37 @@
+var async = require("async");
+
 var movementController = require('../controller/movementController');
+var petController = require('../controller/petController');
 
 var sessionStore     = require('connect-mongo'); // find a working session store (have a look at the readme)
 var room = 'roomFido';
-var connectedUsers = [];
+var connectedUsers = []; // contains connected user objects
+var activeUsers = []; // contains repacked user objects with db query
+
+//__________________________________
+//  Allow arr.unique() to be used 	\________________(need to move this)
+Array.prototype.contains = function(v) {
+    for(var i = 0; i < this.length; i++) {
+        if(this[i] === v) return true;
+    }
+    return false;
+};
+
+Array.prototype.unique = function() {
+    var arr = [];
+    for(var i = 0; i < this.length; i++) {
+        if(!arr.contains(this[i])) {
+            arr.push(this[i]);
+        }
+    }
+    return arr; 
+}
 
 module.exports = function(io){
 	io.on('connection', function(socket){
 
 		function addConnectedUsers() {
+			connectedUsers.unique();
 			if (!connectedUsers.includes(socket.request.user)) {
 				// if user isnt in the array, add them to it
 				connectedUsers.push(socket.request.user);
@@ -18,15 +42,51 @@ module.exports = function(io){
 			};
 		}
 
-		setInterval(function(){
-			connectedUsers.forEach((element, index) => {
-				if(element._id == socket.request.user._id) {
-					element = socket.request.user;
-				}
-			});
-			socket.emit('updateActiveUsers', connectedUsers);
-		}, 5000);
+		function prepareLeaderBoardInfoAsync() {
 
+			activeUsers = []
+
+			// 1st para in async.each() is the array of items
+			async.each(connectedUsers,
+				// 2nd param is the function that each item is passed to
+				function(e, callback){
+					// Call an asynchronous function, often a save() to DB
+					if(e._id == socket.request.user._id) {
+							e = socket.request.user;
+						};
+					movementController.getMovement( e, function(movementTotalSteps, movementTreasureSteps){
+						petController.getPet( e, function(petName, petType, petAge){
+
+							var player = {
+								userName: e.firstname,
+								petName: petName,
+								petType: petType,
+								petAge: petAge,
+								mvTotalStep: movementTotalSteps,
+								mvTreasure: movementTreasureSteps
+								//treasureCount = bag.treasureCount;
+							};
+							activeUsers.push(player);
+							// Async call is done, alert via callback
+							callback(activeUsers);
+						})
+					});
+				},
+				// 3rd param is the function to call when everything's done
+				function(err){
+					if (err) {
+						// *** console.log('asyncErr:', err);
+					}
+					// All tasks are done now
+					socket.emit('updateActiveUsers', activeUsers);
+				}
+			);
+		}
+
+		setInterval(function(){
+		// regularly update ActiveUsers array info
+			prepareLeaderBoardInfoAsync();
+		}, 5000);
 
 	//__________________________________
 	//  Invoke Controller Functions 	\________________
@@ -70,19 +130,16 @@ module.exports = function(io){
 			if (user && user.logged_in) {
 			// check that user is loggedin
 				movementController.updateStep(user, stepDistance, function(totalSteps, treasureSessionSteps) {
-	    			socket.emit('fromController-updatedStepCount', totalSteps, treasureSessionSteps, socket.request.user);
-	    			// this calls updateStepCount() on client
+					socket.emit('fromController-updatedStepCount', totalSteps, treasureSessionSteps, socket.request.user);
+					// this calls updateStepCount() on client
 				});
 			}
 		});
 
-		socket.on('test', function () {
-			console.log('test connection count');
-		})
-
 		socket.on('disconnect', function() {
 			for (var i = 0; i < connectedUsers.length; i++) {
 				if (connectedUsers[i] == socket.request.user) {
+					console.log(socket.request.user.firstname, 'disconnected');
 					connectedUsers.splice(i, 1);
 					console.log('remaining users:', connectedUsers);
 				};
