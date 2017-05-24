@@ -43,9 +43,7 @@ module.exports = function(io){
 		}
 
 		function prepareLeaderBoardInfoAsync() {
-
 			activeUsers = []
-
 			// 1st para in async.each() is the array of items
 			async.each(connectedUsers,
 				// 2nd param is the function that each item is passed to

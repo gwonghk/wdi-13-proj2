@@ -1,0 +1,42 @@
+// Modal
+#checkStats.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalTitle2', aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			// Modal Header
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#modalTitle2.modal-title
+					| Leader Board
+			// Modal Body
+			.modal-body
+				.table-responsive
+					table.table.table-striped
+						thead
+							tr
+								th #
+								th Player
+								th Pet
+								th Total Steps
+						tbody#leaderBoardBody
+							tr
+								td.lboardRank 1
+								//- (scope='row') #{index + 1}
+								td.lboardName adsf
+								td.lboardPet
+								td.lboardScore.myTotalStepCount
+							tr
+								td 2
+								td amet
+								td consectetur
+								td 123
+					//- .checkbox
+					//- 	label
+					//- 		input(type='checkbox')
+					//- 		|  Check me out
+					//- button.btn.btn-default(type='submit') Submit
+			// Modal Footer
+			.modal-footer
+				button.btn.btn-default(type='button', data-dismiss='modal')
+					| Close

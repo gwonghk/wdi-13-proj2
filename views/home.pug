@@ -1,7 +1,7 @@
 extends layout
 block content
-	#roomLabel Room One: 
-		#roomAttendance asdf
+	#roomLabel
+		#roomAttendance
 	.row.text-center
 		.col.align-self-center
 			br
@@ -29,10 +29,12 @@ block content
 				#stepsTillTreasureBar.progress-bar.progress-bar-striped.active(role='progressbar', aria-valuenow='0', aria-valuemin='0', aria-valuemax='100', style='width: 0%')
 					span.sr-only 45% Complete
 				span#stepsTillTreasure Waiting for Game Start
-	.row
+	br
+	.row.text-center
 		.col.align.-sef.center
 			button.btn.btn-primary.btn-md(data-toggle='modal', data-target='#checkStats') Leaderboard
 			include ./modal-leaderboard.pug
+	br
 	.row.text-center
 		.col.align-self-center
 			h4 Total Steps Walked: 
@@ -48,5 +50,5 @@ block scripts
 		tr
 			td.lboardRank {{rank}}
 			td.lboardName {{name}}
-			{{petType}}
+			td.lboardPet.icon.mini-poring
 			td.lboardScore {{stepCount}}

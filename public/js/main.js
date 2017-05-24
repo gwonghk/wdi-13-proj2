@@ -39,7 +39,7 @@ var GameBoard = function(){
 		socket.emit('joinGlobalRoom', room);
 	});
 
-	//
+	// Update LeaderBoard
 	socket.on('updateActiveUsers', function(activeUsersArray){
 		updateLeaderBoard(activeUsersArray);
 	});
@@ -58,6 +58,15 @@ var GameBoard = function(){
 		$('#leaderBoardBody').empty();
 		activeUsersArray.forEach(e => {
 
+
+			var tableRowHTML = template;
+			tableRowHTML = tableRowHTML.replace("{{rank}}", 1);
+			tableRowHTML = tableRowHTML.replace("{{name}}", e.userName);
+			tableRowHTML = tableRowHTML.replace("{{pet}}", ".icon.mini-"+e.petType);
+			tableRowHTML = tableRowHTML.replace("{{stepCount}}", e.mvTotalStep);
+			$('#leaderBoardBody').append(tableRowHTML);
+		})
+	};
 			// var player = {
 			// 	userName: e.firstname,
 			// 	petName: petName,
@@ -80,20 +89,6 @@ var GameBoard = function(){
 					td.lboardName adsf
 					td.lboardPet
 					td.lboardScore.myTotalStepCount*/
-
-			var tableRowHTML = template;
-			tableRowHTML = tableRowHTML.replace("{{rank}}", 1);
-			tableRowHTML = tableRowHTML.replace("{{name}}", e.userName);
-			tableRowHTML = tableRowHTML.replace("{{petType}}", '<td class="lboardName icon mini-'+e.petType+'"></td>"');
-			tableRowHTML = tableRowHTML.replace("{{stepCount}}", e.mvTotalStep);
-			$('#leaderBoardBody').append(tableRowHTML);
-		})
-	};
-
-	function updateAttendence(activeUsersArray) {
-		// body...
-	}
-
 
 	function updateStepCount() {
 			/* emit event to
