@@ -21,7 +21,9 @@ var server = http.Server(app);
 //connect w/ MongoDB ***
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/proj2');
+// var url = 'mongodb://localhost/proj2' // for local
+var url = process.env.MONGOLAB_URI // for mlab
+mongoose.connect(url);
 
 
 // view engine setup
